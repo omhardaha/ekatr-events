@@ -8,12 +8,12 @@ function getYear() {
 getYear();
 
 // lightbox
-$(document).on('click', '[data-toggle="lightbox"]', function(event) {
+$(document).on('click', '[data-toggle="lightbox"]', function (event) {
     event.preventDefault();
     $(this).ekkoLightbox({
         alwaysShowClose: true,
     });
-    
+
 });
 
 /** google_map js **/
@@ -26,24 +26,58 @@ function myMap() {
 }
 
 
-// slide images
-var images = [];
 
-images[0] = ["./images/slider/2.jpg"];
-images[1] = ["./images/slider/1.jpg"];
-images[2] = ["./images/slider/e.jpg"];
-var index = 0;
+const images = [];
+
+const imagePaths= [];
+imagePaths[0] = ["./images/slider/2.jpg"];
+imagePaths[1] = ["./images/slider/1.jpg"];
+imagePaths[2] = ["./images/slider/e.jpg"];
+let index = 0;
 
 
-function change() {
-    document.getElementById("hero-img").src = images[index];
-    if (index == 2) {
-      index = 0;
-    } else {
-      index++;
+function preloadImages(imageArray) {
+    for (let i = 0; i < imageArray.length; i++) {
+        images[i] = new Image();
+        images[i].src = imageArray[i];
+        if(i == 2){
+            images[i].onload = setTimeout(changeImage, 5000);
+        }
     }
-  
-    setTimeout(change, 5000);
-  }
-  
-  window.onload = change();
+    
+}
+
+preloadImages(imagePaths);
+
+// function change() {
+//     imageElement = document.getElementById("hero-img");
+//     // imageElement.style.opacity = 0.4;
+
+//     document.getElementById("hero-img").src = images[index];
+//     index = (index+1)%3;
+
+//     // imageElement.style.opacity = 0;
+//     setTimeout(change, 5000);
+//   }
+
+//   window.onload = change();
+
+function changeImage() {
+    const imageElement = document.getElementById('hero-img');
+
+    // Fade out
+    imageElement.style.opacity = 0;
+    
+    // index = (index + 1) % 3;
+    
+    // Fade in
+    // After the fade-out transition completes (1s), change the image and fade in
+    setTimeout(() => {
+        imageElement.src = images[index].src;
+        index = (index + 1) % 3
+        imageElement.style.opacity = 0.4;
+        images[index].onload = setTimeout(changeImage, 5000);
+    }, 1000); // Match this duration to the CSS transition duration
+}
+
+

@@ -150,6 +150,8 @@ a:focus {
      object-fit: cover;
   -o-object-position: bottom left;
      object-position: bottom left;
+
+     transition: opacity 1s;
 }
 
 .sub_page .hero_area {
